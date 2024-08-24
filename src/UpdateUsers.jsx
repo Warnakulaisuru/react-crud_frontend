@@ -10,6 +10,10 @@ function UpdateUsers() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
+  const [nic, setNIC] = useState("");
+  const [nicType, setNicType] = useState("");
+  const [gender, setGender] = useState("");
+  const [department, setDepartment] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,14 +23,36 @@ function UpdateUsers() {
         setName(result.data.name);
         setEmail(result.data.email);
         setAge(result.data.age);
+        setNIC(result.data.nic);
+        setNicType(result.data.nicType)
+        setGender(result.data.gender);
+        setDepartment(result.data.department);
       })
       .catch((err) => console.log(err));
   }, [id]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
+
+    // Check if age is a negative number
+    if (age < 0) {
+      toast.error("Age cannot be a negative number!");
+      return;
+    }
+
+    // Validate NIC based on selected NIC type
+    // if (nicType === "V" || nicType === "X") {
+    //   if (nic.length !== 9) {
+    //     toast.error("NIC must be 9 characters long when using V or X!");
+    //     return;
+    //   }
+    // } else if (nic.length !== 12) {
+    //   toast.error("NIC must be 12 characters long!");
+    //   return;
+    // }
+
     axios
-      .put("http://localhost:4000/updateUser/" + id, { name, email, age })
+      .put("http://localhost:4000/updateUser/" + id, { name, email, age, nic, gender, department })
       .then((result) => {
         console.log(result);
         toast.success("User has been updated successfully!");
@@ -43,7 +69,7 @@ function UpdateUsers() {
       className="d-flex vh-100 justify-content-center align-items-center"
       style={{
         background:
-          "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)",
+          "linear-gradient(135deg, #a1c4fd 20%, #c2e9fb 50%, #ffffff 70%)",
       }}
     >
       <div className="w-50 bg-white rounded p-4 shadow">
@@ -90,6 +116,98 @@ function UpdateUsers() {
               onChange={(e) => setAge(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="nic" className="form-label">
+              NIC
+            </label>
+            <input
+              type="text"
+              id="nic"
+              placeholder="Enter NIC"
+              className="form-control"
+              value={nic}
+              onChange={(e) => setNIC(e.target.value)}
+              required
+            />
+            <div className="mt-2">
+              <label className="form-check-label me-2">NIC Type:</label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="nicType"
+                  id="nicTypeV"
+                  value="V"
+                  onChange={(e) => setNicType(e.target.value)}
+                  checked={nicType === "V"}
+                />
+                <label className="form-check-label" htmlFor="nicTypeV">
+                  V
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="nicType"
+                  id="nicTypeX"
+                  value="X"
+                  onChange={(e) => setNicType(e.target.value)}
+                  checked={nicType === "X"}
+                />
+                <label className="form-check-label" htmlFor="nicTypeX">
+                  X
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="nicType"
+                  id="nicTypeNone"
+                  value=""
+                  onChange={(e) => setNicType(e.target.value)}
+                  checked={nicType === ""}
+                />
+                <label className="form-check-label" htmlFor="nicTypeNone">
+                  None
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="gender" className="form-label">
+              Gender
+            </label>
+            <select
+              className="form-control"
+              id="gender"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              required
+            >
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="department" className="form-label">
+              Department
+            </label>
+            <select
+              className="form-control"
+              id="department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              required
+            >
+              <option value="">Select</option>
+              <option value="IT">IT</option>
+              <option value="Account">Account</option>
+              <option value="HR">HR</option>
+            </select>
           </div>
           <button type="submit" className="btn btn-success w-100">
             Update

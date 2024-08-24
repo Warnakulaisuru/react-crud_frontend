@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import img01 from './assets/picture/unnamed.png';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -33,8 +34,10 @@ function Users() {
     <div
       className="d-flex vh-100 justify-content-center align-items-center"
       style={{
-        background:
-          "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)",
+        backgroundImage: `url(${img01})`,
+        backgroundSize: "span",
+        backgroundPosition: "center",
+        backgroundRepeat: "repeat",
       }}
     >
       <div className="w-75 bg-white rounded p-4 shadow">
@@ -50,6 +53,9 @@ function Users() {
               <th>Name</th>
               <th>Email</th>
               <th>Age</th>
+              <th>NIC</th>
+              <th>Gender</th>
+              <th>Department</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -59,6 +65,9 @@ function Users() {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.age}</td>
+                <td>{user.nic}</td>
+                <td>{user.gender}</td>
+                <td>{user.department}</td>
                 <td className="text-center">
                   <Link
                     to={`/update/${user._id}`}
