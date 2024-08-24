@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import img01 from './assets/picture/unnamed.png';
+
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -34,10 +34,8 @@ function Users() {
     <div
       className="d-flex vh-100 justify-content-center align-items-center"
       style={{
-        backgroundImage: `url(${img01})`,
-        backgroundSize: "span",
-        backgroundPosition: "center",
-        backgroundRepeat: "repeat",
+        background:
+          "linear-gradient(135deg, #a1c4fd 20%, #c2e9fb 50%, #ffffff 70%)",
       }}
     >
       <div className="w-75 bg-white rounded p-4 shadow">
