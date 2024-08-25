@@ -75,14 +75,16 @@ function CreateUsers() {
 
   return (
     <div
-      className="d-flex vh-100 justify-content-center align-items-center"
+      className="vh-100 d-flex flex-column align-items-center"
       style={{
         background:
           "linear-gradient(135deg, #a1c4fd 20%, #c2e9fb 50%, #ffffff 70%)",
       }}
     >
-      <div className="w-50 bg-white rounded p-4 shadow">
-        <h2 className="text-center mb-4">Add User</h2>
+      <div className="d-flex flex-column align-items-center pt-5">
+        <h1 className="title">Add User</h1>
+      </div>
+      <div className="w-50 bg-white rounded p-4 shadow mt-3">
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">

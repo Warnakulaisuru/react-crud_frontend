@@ -1,21 +1,25 @@
 import { Container, Row} from "reactstrap";
 import { NavLink} from "react-router-dom";
 
-// import logo from "../../assets/picture/unnamed.png";
+import logo from "../../assets/picture/logo.jpg";
 import "./header.css";
 
 const nav__links = [
   {
-    path: "/home",
+    path: "/",
     display: "Home",
   },
   {
-    path: "/about",
-    display: "About",
+    path: "/create",
+    display: "Add",
   },
   {
-    path: "/tours",
-    display: "Tours",
+    path: "/update",
+    display: "Update",
+  },
+  {
+    path: "/delete",
+    display: "Delete",
   },
 ];
 
@@ -27,9 +31,9 @@ const Header = () => {
         <Row>
           <div className="nav__wrapper d-flex align-items-center justify-content-between">
             {/* --logo-- */}
-            {/* <div className="logo">
+            <div className="logo">
               <img src={logo} alt="" />
-            </div> */}
+            </div>
             {/* --logo end-- */}
 
             {/* --menu start-- */}
