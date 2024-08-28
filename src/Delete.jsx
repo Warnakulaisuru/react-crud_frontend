@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function Users() {
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,16 +21,27 @@ function Users() {
     axios
       .delete("http://localhost:4000/deleteUser/" + id)
       .then((res) => {
-        console.log(res);
         toast.success("User has been deleted successfully!");
         setUsers(users.filter((user) => user._id !== id));
         setTimeout(() => navigate("/"), 2000); // Wait for 2 seconds before navigating
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Failed to delete user!");
       });
   };
+
+  // Function to handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filter users based on the search term
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.nic.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.department.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div
@@ -43,27 +55,37 @@ function Users() {
         <h1 className="title mb-4">Delete User</h1>
       </div>
       <div className="w-75 bg-white rounded p-4 shadow mt-3">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          {/* You can add a button or any other element here if needed */}
+        {/* Search Input */}
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by name, email, NIC, or department"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
         </div>
+        
         <table className="table table-hover table-bordered">
           <thead className="thead-dark">
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Age</th>
-              <th>NIC</th>
-              <th>Gender</th>
-              <th>Department</th>
-              <th>Action</th>
+              <th className="text-center">Emp No</th>
+              <th className="text-center">Name</th>
+              <th className="text-center">Email</th>
+              <th className="text-center">Age</th>
+              <th className="text-center">NIC</th>
+              <th className="text-center">Gender</th>
+              <th className="text-center">Department</th>
+              <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user, index) => (
               <tr key={user._id}>
+                <td className="text-center">{index + 1}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.age}</td>
+                <td className="text-center">{user.age}</td>
                 <td>{user.nic}</td>
                 <td>{user.gender}</td>
                 <td>{user.department}</td>

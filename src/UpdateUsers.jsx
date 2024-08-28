@@ -23,36 +23,67 @@ function UpdateUsers() {
         setName(result.data.name);
         setEmail(result.data.email);
         setAge(result.data.age);
-        setNIC(result.data.nic);
-        setNicType(result.data.nicType)
+        setNIC(result.data.nic.replace(/[VX]$/, "")); // Extract NIC number
+        setNicType(result.data.nicType);
         setGender(result.data.gender);
         setDepartment(result.data.department);
       })
       .catch((err) => console.log(err));
   }, [id]);
 
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    const filteredValue = value.replace(/[^A-Za-z\s'-]/g, ""); // Remove non-alphabetic characters
+    if (filteredValue.length <= 30) {
+      setName(filteredValue);
+      }
+  };
+
+  const handleAgeChange = (e) => {
+    const value = e.target.value;
+    const filteredValue = value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+    if (filteredValue.length <= 2) {
+      setAge(filteredValue);
+    }
+  };
+
+  const handleNICChange = (e) => {
+    const value = e.target.value;
+    const filteredValue = value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+    if (filteredValue.length <= 12) {
+      setNIC(filteredValue);
+    }
+  };
+
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    // Check if age is a negative number
+    // Validate age
     if (age < 0) {
       toast.error("Age cannot be a negative number!");
       return;
     }
 
-    // Validate NIC based on selected NIC type
-    // if (nicType === "V" || nicType === "X") {
-    //   if (nic.length !== 9) {
-    //     toast.error("NIC must be 9 characters long when using V or X!");
-    //     return;
-    //   }
-    // } else if (nic.length !== 12) {
-    //   toast.error("NIC must be 12 characters long!");
-    //   return;
-    // }
+    // Validate NIC
+    if (nicType === "V" || nicType === "X") {
+      if (nic.length !== 9) {
+        toast.error("NIC must be 9 characters long when using V or X!");
+        return;
+      }
+    } else if (nic.length !== 12) {
+      toast.error("NIC must be 12 characters long!");
+      return;
+    }
 
     axios
-      .put("http://localhost:4000/updateUser/" + id, { name, email, age, nic, gender, department })
+      .put("http://localhost:4000/updateUser/" + id, {
+        name,
+        email,
+        age,
+        nic: nic + nicType, // Combine NIC number with NIC type
+        gender,
+        department,
+      })
       .then((result) => {
         console.log(result);
         toast.success("User has been updated successfully!");
@@ -85,7 +116,7 @@ function UpdateUsers() {
               placeholder="Enter Name"
               className="form-control"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               required
             />
           </div>
@@ -108,12 +139,12 @@ function UpdateUsers() {
               Age
             </label>
             <input
-              type="number"
+              type="text" // Changed from "number" to "text" to allow custom input handling
               id="age"
               placeholder="Enter Age"
               className="form-control"
               value={age}
-              onChange={(e) => setAge(e.target.value)}
+              onChange={handleAgeChange}
               required
             />
           </div>
@@ -127,7 +158,7 @@ function UpdateUsers() {
               placeholder="Enter NIC"
               className="form-control"
               value={nic}
-              onChange={(e) => setNIC(e.target.value)}
+              onChange={handleNICChange}
               required
             />
             <div className="mt-2">
