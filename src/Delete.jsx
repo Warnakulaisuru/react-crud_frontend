@@ -13,19 +13,21 @@ function Users() {
   useEffect(() => {
     axios
       .get("http://localhost:4000")
-      .then((result) => setUsers(result.data))
-      .catch((err) => console.log(err));
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.log(error));
   }, []);
 
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:4000/deleteUser/" + id)
-      .then((res) => {
+      .delete(`http://localhost:4000/deleteUser/${id}`)
+      .then((response) => {
+        console.log(response);
         toast.success("User has been deleted successfully!");
         setUsers(users.filter((user) => user._id !== id));
         setTimeout(() => navigate("/"), 2000); // Wait for 2 seconds before navigating
       })
-      .catch((err) => {
+      .catch((error) => {
+        console.log(error);
         toast.error("Failed to delete user!");
       });
   };
