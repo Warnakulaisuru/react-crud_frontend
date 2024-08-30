@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,14 +13,27 @@ function CreateUsers() {
   const [nicType, setNicType] = useState("");
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
+  const [departments, setDepartments] = useState([]); // State to store department options
 
   const navigate = useNavigate();
+
+  // Fetch department data from the backend when the component mounts
+  useEffect(() => {
+    axios.get("http://localhost:4000/api/departments")
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching departments:", error);
+        toast.error("Failed to load departments!");
+      });
+  }, []);
 
   const handleNameChange = (e) => {
     const value = e.target.value;
     const filteredValue = value.replace(/[^A-Za-z\s'-]/g, ""); // Remove non-alphabetic characters
     if (filteredValue.length <= 30) {
-    setName(filteredValue);
+      setName(filteredValue);
     }
   };
 
@@ -230,9 +243,11 @@ function CreateUsers() {
               required
             >
               <option value="">Select Department</option>
-              <option value="IT">IT</option>
-              <option value="Account">Account</option>
-              <option value="HR">HR</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept.name}>
+                  {dept.name}
+                </option>
+              ))}
             </select>
           </div>
           <button type="submit" className="btn btn-success w-100">
