@@ -14,6 +14,7 @@ function UpdateUsers() {
   const [nicType, setNicType] = useState("");
   const [gender, setGender] = useState("");
   const [department, setDepartment] = useState("");
+  const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +31,18 @@ function UpdateUsers() {
       })
       .catch((err) => console.log(err));
   }, [id]);
+
+    // Fetch department data from the backend when the component mounts
+    useEffect(() => {
+      axios.get("http://localhost:4000/api/departments")
+        .then((response) => {
+          setDepartments(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching departments:", error);
+          toast.error("Failed to load departments!");
+        });
+    }, []);
 
   const handleNameChange = (e) => {
     const value = e.target.value;
@@ -224,20 +237,19 @@ function UpdateUsers() {
             </select>
           </div>
           <div className="mb-3">
-            <label htmlFor="department" className="form-label">
-              Department
-            </label>
+            <label htmlFor="department">Department</label>
             <select
               className="form-control"
-              id="department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
               required
             >
-              <option value="">Select</option>
-              <option value="IT">IT</option>
-              <option value="Account">Account</option>
-              <option value="HR">HR</option>
+              <option value="">Select Department</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept.name}>
+                  {dept.name}
+                </option>
+              ))}
             </select>
           </div>
           <button type="submit" className="btn btn-success w-100">
